@@ -8,6 +8,9 @@ def versionMajor = 0
 def versionMinor = 1
 def versionPatch = 0
 
+nexusPWD = System.getenv("CN_NEXUS_PWD") ? System.getenv("CN_NEXUS_PWD") : versionMajor
+nexusUID = System.getenv("CN_NEXUS_UID") ? System.getenv("CN_NEXUS_UID") : versionMinor
+
 versionMajor = System.getenv("VERSION_MAJOR") ? System.getenv("VERSION_MAJOR") : versionMajor
 versionMinor = System.getenv("VERSION_MINOR") ? System.getenv("VERSION_MINOR") : versionMinor
 versionPatch = System.getenv("VERSION_PATCH") ? System.getenv("VERSION_PATCH") : versionPatch
