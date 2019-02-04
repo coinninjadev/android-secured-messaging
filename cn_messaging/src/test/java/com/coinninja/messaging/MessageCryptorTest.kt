@@ -43,7 +43,7 @@ class MessageCryptorTest {
 
 
     @Test
-    fun `expects 32 length key`() {
+    fun `expected to be successful`() {
         assertThat(2 + 2, equalTo(4))
     }
 }

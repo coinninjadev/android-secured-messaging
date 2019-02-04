@@ -1,0 +1,44 @@
+image: registry.coinninja.net/engineering/android-sdk:latest
+
+stages:
+- build
+- deploy
+
+
+before_script:
+- chmod +x ./gradlew
+- export ANDROID_HOME=/sdk-tools/
+- export PATH=$PATH:/sdk-tools/platform-tools/
+
+units:
+  stage: build
+  tags:
+  - linux
+  script:
+  - ./gradlew clean build
+  artifacts:
+    when: always
+    expire_in: '1 week'
+    paths:
+    - ./app/build/test-results/**/*
+    - ./app/build/**/*.aar
+    reports:
+      junit: ./app/build/test-results/testStagingDebugUnitTest/TEST*.xml
+
+publish:
+  stage: deploy
+  script:
+  - ./gradlew uploadArchives
+  environment:
+    name: internal
+  tags:
+  - linux
+  artifacts:
+    name: "manualInstallableAPK-$CI_COMMIT_REF_NAME-$CI_COMMIT_SHA"
+    when: always
+    expire_in: '1 week'
+    paths:
+    - ./app/build/**/*.aar
+  when: manual
+  only:
+  - tags
