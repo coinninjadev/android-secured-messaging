@@ -5,6 +5,7 @@ import org.bouncycastle.util.encoders.Hex
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
@@ -41,9 +42,15 @@ class MessageCryptorTest {
         System.out.println(Hex.toHexString(keyBC.getEncoded()).length)
     }
 
-
     @Test
-    fun `expected to be successful`() {
+    fun `encryption of message`() {
         assertThat(2 + 2, equalTo(4))
     }
+
+    @Ignore
+    @Test
+    fun `decryption of message`() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
 }

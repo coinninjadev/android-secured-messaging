@@ -40,5 +40,5 @@ publish:
     paths:
     - ./app/build/**/*.aar
   when: manual
-  only:
-  - tags
+#  only:
+#  - tags

@@ -8,8 +8,10 @@ def versionMajor = 0
 def versionMinor = 1
 def versionPatch = 0
 
-def nexusPWD = System.getenv("CN_NEXUS_PWD") ? System.getenv("CN_NEXUS_PWD") : nexusPWD
-def nexusUID = System.getenv("CN_NEXUS_UID") ? System.getenv("CN_NEXUS_UID") : nexusUID
+def ciApiEndpoint = System.getenv("CI_API_V4_URL") ? System.getenv("CI_API_V4_URL") : ""
+def ciProjectNamespace = System.getenv("CI_PROJECT_NAMESPACE") ? System.getenv("CI_PROJECT_NAMESPACE") : ""
+def mavenRepo = String.format("%s/groups/%s/-/packages/maven", ciApiEndpoint, ciProjectNamespace)
+def ciAuthToken = System.getenv("CI_JOB_TOKEN") ? System.getenv("CI_JOB_TOKEN") : ""
 
 versionMajor = System.getenv("VERSION_MAJOR") ? System.getenv("VERSION_MAJOR") : versionMajor
 versionMinor = System.getenv("VERSION_MINOR") ? System.getenv("VERSION_MINOR") : versionMinor
@@ -61,10 +63,10 @@ repositories {
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: "https://nexus.coinninja.net/repository/maven-releases/") {
+            repository(url: mavenRepo ) {
                 authentication(
-                        userName: nexusUID,
-                        password: nexusPWD)
+                        userName: "gitlab-ci-token",
+                        password: ciAuthToken)
                 pom.groupId = "com.coinninja.messaging"
                 pom.artifactId = "cn_messaging-release.aar"
                 pom.version = currentVersion
