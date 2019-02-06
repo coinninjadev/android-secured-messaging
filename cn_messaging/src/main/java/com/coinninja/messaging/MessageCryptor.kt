@@ -8,8 +8,7 @@ import javax.crypto.spec.SecretKeySpec
 
 class MessageCryptor {
 
-    fun encrypt(
-        dataToEncrypt: ByteArray, encryptionKey: ByteArray, hmac: ByteArray,
+    fun encrypt(dataToEncrypt: ByteArray, encryptionKey: ByteArray, hmac: ByteArray,
         ephemeralPublicKey: ByteArray
     ): ByteArray {
         val encryptionKeySecret = SecretKeySpec(encryptionKey, "AES")
@@ -23,9 +22,11 @@ class MessageCryptor {
 
     // data (which includes the ephemeralPublicKey) EphemeralPubKey is the argument used to generate Decryption keys
     //DecryptionKeys encryptionKey & hmac
-    fun decrypt(dataToDecrypt: ByteArray, decryptionKey: ByteArray): ByteArray {
+    fun decrypt(dataToDecrypt: ByteArray, encryptionKey: ByteArray, hmac: ByteArray): ByteArray {
+        val encryptionKeySecret = SecretKeySpec(encryptionKey, "AES")
+        val hmacSecret = SecretKeySpec(hmac, "AES")
 
-        return "".toByteArray()
+        return AES256JNCryptor().decryptData(dataToDecrypt.slice(0..(dataToDecrypt.size-66)).toByteArray(), encryptionKeySecret, hmacSecret)
     }
 
     fun unpackEphemeralPublicKey(dataToDecrypt: ByteArray): ByteArray {
