@@ -28,7 +28,7 @@ units:
 publish:
   stage: deploy
   script:
-  - ./gradlew uploadArchives
+  - ./gradlew clean build publish
   environment:
     name: internal
   tags:
@@ -40,5 +40,5 @@ publish:
     paths:
     - ./cn_messaging/build/**/*.aar
   when: manual
-#  only:
-#  - tags
+  only:
+  - tags

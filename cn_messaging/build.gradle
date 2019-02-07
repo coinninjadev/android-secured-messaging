@@ -2,24 +2,57 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 def nexusUID = System.getenv("CN_NEXUS_UID") ? System.getenv("CN_NEXUS_UID") : nexusUID
 def nexusPWD = System.getenv("CN_NEXUS_PWD") ? System.getenv("CN_NEXUS_PWD") : nexusPWD
 
 def versionMajor = 0
 def versionMinor = 1
-def versionPatch = 0
+def versionPatch = 5
 
+def ciAuthToken = System.getenv("CI_JOB_TOKEN") ? System.getenv("CI_JOB_TOKEN") : ciAuthToken
 def ciApiEndpoint = System.getenv("CI_API_V4_URL") ? System.getenv("CI_API_V4_URL") : ""
 def ciProjectNamespace = System.getenv("CI_PROJECT_NAMESPACE") ? System.getenv("CI_PROJECT_NAMESPACE") : ""
 def mavenRepo = String.format("%s/groups/%s/-/packages/maven", ciApiEndpoint, ciProjectNamespace)
-def ciAuthToken = System.getenv("CI_JOB_TOKEN") ? System.getenv("CI_JOB_TOKEN") : ""
 
 versionMajor = System.getenv("VERSION_MAJOR") ? System.getenv("VERSION_MAJOR") : versionMajor
 versionMinor = System.getenv("VERSION_MINOR") ? System.getenv("VERSION_MINOR") : versionMinor
 versionPatch = System.getenv("VERSION_PATCH") ? System.getenv("VERSION_PATCH") : versionPatch
 
 def currentVersion = String.format("%s.%s.%s", versionMajor, versionMinor, versionPatch)
+
+publishing {
+    repositories {
+        maven {
+            url "https://git.coinninja.net/api/v4/projects/176/packages/maven"
+            credentials(HttpHeaderCredentials) {
+                name = "Private-Token"
+                value = ciAuthToken
+            }
+            authentication {
+                header(HttpHeaderAuthentication)
+            }
+        }
+
+        maven {
+            url "https://nexus.coinninja.net/repository/maven-releases/"
+            credentials {
+                username= nexusUID
+                password= nexusPWD
+            }
+        }
+
+    }
+    publications {
+        maven(MavenPublication) {
+            groupId = "com.coinninja.messaging"
+            artifactId = "cn_messaging-release.aar"
+            version = currentVersion
+        }
+    }
+
+}
 
 android {
     compileSdkVersion 28
@@ -29,7 +62,6 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
@@ -64,25 +96,3 @@ repositories {
     mavenCentral()
 }
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: mavenRepo) {
-                authentication(
-                        userName: "gitlab-ci-token",
-                        password: ciAuthToken)
-                pom.groupId = "com.coinninja.messaging"
-                pom.artifactId = "cn_messaging-release.aar"
-                pom.version = currentVersion
-            }
-            repository(url: "https://nexus.coinninja.net/repository/maven-releases/") {
-                authentication(
-                        userName: nexusUID,
-                        password: nexusPWD)
-                pom.groupId = "com.coinninja.libbitcoin"
-                pom.artifactId = "libbitcoinbindings-release"
-                pom.version = currentVersion
-            }
-        }
-    }
-}
