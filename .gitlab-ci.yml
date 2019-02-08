@@ -20,10 +20,10 @@ units:
     when: always
     expire_in: '1 week'
     paths:
-    - ./app/build/test-results/**/*
-    - ./app/build/**/*.aar
+    - ./cn_messaging/build/test-results/**/*
+    - ./cn_messaging/build/**/*.aar
     reports:
-      junit: ./app/build/test-results/testStagingDebugUnitTest/TEST*.xml
+      junit: ./cn_messaging/build/test-results/testStagingDebugUnitTest/TEST*.xml
 
 publish:
   stage: deploy
@@ -38,7 +38,7 @@ publish:
     when: always
     expire_in: '1 week'
     paths:
-    - ./app/build/**/*.aar
+    - ./cn_messaging/build/**/*.aar
   when: manual
 #  only:
 #  - tags
