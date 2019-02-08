@@ -1,10 +1,7 @@
 package com.coinninja.messaging
 
-import android.os.Build
+import org.apache.commons.codec.binary.Base64
 import org.cryptonode.jncryptor.AES256JNCryptor
-import org.cryptonode.jncryptor.JNCryptor
-import java.util.*
-import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.SecretKeySpec
 
 
@@ -21,18 +18,12 @@ class MessageCryptor {
         return encryptData + ephemeralPublicKey
     }
 
-//    // do this with apache commons? Do this in app?
-//    fun encryptBase64(dataToEncrypt: ByteArray, encryptionKey: ByteArray, hmac: ByteArray,
-//                      ephemeralPublicKey: ByteArray
-//    ): String? {
-//        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//            Base64.getEncoder().encodeToString(encrypt(dataToEncrypt, encryptionKey, hmac, ephemeralPublicKey))
-//        } else {
-//            TODO("VERSION.SDK_INT < O")
-//        }
-//    }
-//    // base64 string version?
-
+    fun encryptAsBase64(
+        dataToEncrypt: ByteArray, encryptionKey: ByteArray, hmac: ByteArray,
+        ephemeralPublicKey: ByteArray
+    ): String? {
+        return Base64.encodeBase64String(encrypt(dataToEncrypt, encryptionKey, hmac, ephemeralPublicKey))
+    }
 
     fun decrypt(dataToDecrypt: ByteArray, encryptionKey: ByteArray, hmac: ByteArray): ByteArray {
         val encryptionKeySecret = SecretKeySpec(encryptionKey, "AES")
@@ -45,7 +36,15 @@ class MessageCryptor {
         )
     }
 
+    fun decrypt(dataToDecryptBase64: String?, encryptionKey: ByteArray, hmac: ByteArray): ByteArray {
+        return decrypt(Base64.decodeBase64(dataToDecryptBase64), encryptionKey, hmac)
+    }
+
     fun unpackEphemeralPublicKey(dataToDecrypt: ByteArray): ByteArray {
         return dataToDecrypt.slice((dataToDecrypt.size - 65)..(dataToDecrypt.size - 1)).toByteArray()
+    }
+
+    fun unpackEphemeralPublicKey(dataToDecryptBase64: String): ByteArray {
+        return unpackEphemeralPublicKey(Base64.decodeBase64(dataToDecryptBase64))
     }
 }

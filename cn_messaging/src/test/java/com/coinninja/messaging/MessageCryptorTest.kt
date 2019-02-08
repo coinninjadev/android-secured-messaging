@@ -1,21 +1,11 @@
 package com.coinninja.messaging
 
-import org.bouncycastle.jce.provider.BouncyCastleProvider
-import org.bouncycastle.util.encoders.Hex
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.junit.MockitoJUnitRunner
-import java.security.SecureRandom
-import java.security.Security
-import java.security.spec.KeySpec
 import java.util.*
-import javax.crypto.SecretKey
-import javax.crypto.SecretKeyFactory
-import javax.crypto.spec.PBEKeySpec
 
 @RunWith(MockitoJUnitRunner::class)
 
@@ -45,8 +35,28 @@ class MessageCryptorTest {
     }
 
     @Test
+    fun `encryption and decryption of message base64Strings`() {
+
+        val dataToEncrypt = "Hello World".toByteArray()
+        val encryptionKey = Base64.getDecoder().decode(encryptionKeyBase64)
+        val encryptHmac = Base64.getDecoder().decode(hmacBase64)
+
+        val ephemeralPublicKey = Base64.getDecoder().decode(ephemeralPublicKeyBase64)
+        val decoded = messageCryptor.encryptAsBase64(dataToEncrypt, encryptionKey, encryptHmac, ephemeralPublicKey)
+
+        val decrypted = messageCryptor.decrypt(decoded, encryptionKey, encryptHmac)
+        assertThat(dataToEncrypt, equalTo(decrypted))
+    }
+
+    @Test
     fun `Ephemeral key from encrypted`(){
         val unpackEphemeralPublicKey = messageCryptor.unpackEphemeralPublicKey(Base64.getDecoder().decode(encrypted))
+        assertThat(unpackEphemeralPublicKey, equalTo(Base64.getDecoder().decode(ephemeralPublicKeyBase64)))
+    }
+
+    @Test
+    fun `Ephemeral key from encrypted string`(){
+        val unpackEphemeralPublicKey = messageCryptor.unpackEphemeralPublicKey(encrypted)
         assertThat(unpackEphemeralPublicKey, equalTo(Base64.getDecoder().decode(ephemeralPublicKeyBase64)))
     }
 
