@@ -65,12 +65,20 @@ repositories {
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: mavenRepo ) {
+            repository(url: mavenRepo) {
                 authentication(
                         userName: "gitlab-ci-token",
                         password: ciAuthToken)
                 pom.groupId = "com.coinninja.messaging"
                 pom.artifactId = "cn_messaging-release.aar"
+                pom.version = currentVersion
+            }
+            repository(url: "https://nexus.coinninja.net/repository/maven-releases/") {
+                authentication(
+                        userName: nexusUID,
+                        password: nexusPWD)
+                pom.groupId = "com.coinninja.libbitcoin"
+                pom.artifactId = "libbitcoinbindings-release"
                 pom.version = currentVersion
             }
         }
