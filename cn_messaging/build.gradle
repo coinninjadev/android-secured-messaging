@@ -3,6 +3,8 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'maven'
 
+def nexusUID = System.getenv("CN_NEXUS_UID") ? System.getenv("CN_NEXUS_UID") : nexusUID
+def nexusPWD = System.getenv("CN_NEXUS_PWD") ? System.getenv("CN_NEXUS_PWD") : nexusPWD
 
 def versionMajor = 0
 def versionMinor = 1
