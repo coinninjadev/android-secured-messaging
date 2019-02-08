@@ -41,4 +41,4 @@ publish:
     - ./cn_messaging/build/**/*.aar
   when: manual
   only:
-  - tags
+  - develop
