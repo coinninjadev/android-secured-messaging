@@ -26,6 +26,13 @@ allprojects {
         google()
         jcenter()
         maven { url mavenRepo }
+        maven {
+            url "https://nexus.coinninja.net/repository/maven-releases/"
+            credentials {
+                username nexusUID
+                password nexusPWD
+            }
+        }
     }
 }
 

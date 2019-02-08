@@ -1,1 +1,1 @@
-include ':app', ':cn_messaging'
+include ':app', ':cn_messaging', ':test_app'
