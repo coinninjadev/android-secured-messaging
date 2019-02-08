@@ -4,6 +4,9 @@ def ciApiEndpoint = System.getenv("CI_API_V4_URL") ? System.getenv("CI_API_V4_UR
 def ciProjectNamespace = System.getenv("CI_PROJECT_NAMESPACE") ? System.getenv("CI_PROJECT_NAMESPACE") : ""
 def mavenRepo = String.format("%s/groups/%s/-/packages/maven", ciApiEndpoint, ciProjectNamespace)
 
+def nexusUID = System.getenv("CN_NEXUS_UID") ? System.getenv("CN_NEXUS_UID") : nexusUID
+def nexusPWD = System.getenv("CN_NEXUS_PWD") ? System.getenv("CN_NEXUS_PWD") : nexusPWD
+
 buildscript {
     ext.kotlin_version = '1.3.20'
     ext.kotlin_version = '1.3.11'
