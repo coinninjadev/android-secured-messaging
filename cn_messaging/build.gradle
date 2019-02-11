@@ -47,7 +47,7 @@ publishing {
     publications {
         maven(MavenPublication) {
             groupId = "com.coinninja.messaging"
-            artifactId = "cn_messaging-release.aar"
+            artifactId = "cn_messaging-release"
             version = currentVersion
         }
     }
