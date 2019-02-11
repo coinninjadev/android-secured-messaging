@@ -11,7 +11,7 @@ def versionMajor = 0
 def versionMinor = 1
 def versionPatch = 5
 
-def ciAuthToken = System.getenv("CI_JOB_TOKEN") ? System.getenv("CI_JOB_TOKEN") : ciAuthToken
+//def ciAuthToken = System.getenv("CI_JOB_TOKEN") ? System.getenv("CI_JOB_TOKEN") : ciAuthToken
 def ciApiEndpoint = System.getenv("CI_API_V4_URL") ? System.getenv("CI_API_V4_URL") : ""
 def ciProjectNamespace = System.getenv("CI_PROJECT_NAMESPACE") ? System.getenv("CI_PROJECT_NAMESPACE") : ""
 def mavenRepo = String.format("%s/groups/%s/-/packages/maven", ciApiEndpoint, ciProjectNamespace)
@@ -24,16 +24,16 @@ def currentVersion = String.format("%s.%s.%s", versionMajor, versionMinor, versi
 
 publishing {
     repositories {
-        maven {
-            url "https://git.coinninja.net/api/v4/projects/176/packages/maven"
-            credentials(HttpHeaderCredentials) {
-                name = "Private-Token"
-                value = ciAuthToken
-            }
-            authentication {
-                header(HttpHeaderAuthentication)
-            }
-        }
+//        maven {
+//            url "https://git.coinninja.net/api/v4/projects/176/packages/maven"
+//            credentials(HttpHeaderCredentials) {
+//                name = "Private-Token"
+//                value = ciAuthToken
+//            }
+//            authentication {
+//                header(HttpHeaderAuthentication)
+//            }
+//        }
 
         maven {
             url "https://nexus.coinninja.net/repository/maven-releases/"
