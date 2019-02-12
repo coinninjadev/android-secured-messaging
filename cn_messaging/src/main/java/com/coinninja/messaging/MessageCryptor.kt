@@ -5,7 +5,7 @@ import org.cryptonode.jncryptor.AES256JNCryptor
 import javax.crypto.spec.SecretKeySpec
 
 
-class MessageCryptor {
+open class MessageCryptor {
 
     fun encrypt(
         dataToEncrypt: ByteArray, encryptionKey: ByteArray, hmac: ByteArray,
