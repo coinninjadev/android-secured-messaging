@@ -7,7 +7,7 @@ import javax.crypto.spec.SecretKeySpec
 
 open class MessageCryptor {
 
-    fun encrypt(
+    open fun encrypt(
         dataToEncrypt: ByteArray, encryptionKey: ByteArray, hmac: ByteArray,
         ephemeralPublicKey: ByteArray
     ): ByteArray {
@@ -18,14 +18,14 @@ open class MessageCryptor {
         return encryptData + ephemeralPublicKey
     }
 
-    fun encryptAsBase64(
+    open fun encryptAsBase64(
         dataToEncrypt: ByteArray, encryptionKey: ByteArray, hmac: ByteArray,
         ephemeralPublicKey: ByteArray
     ): String? {
         return Base64.encodeBase64String(encrypt(dataToEncrypt, encryptionKey, hmac, ephemeralPublicKey))
     }
 
-    fun decrypt(dataToDecrypt: ByteArray, encryptionKey: ByteArray, hmac: ByteArray): ByteArray {
+    open fun decrypt(dataToDecrypt: ByteArray, encryptionKey: ByteArray, hmac: ByteArray): ByteArray {
         val encryptionKeySecret = SecretKeySpec(encryptionKey, "AES")
         val hmacSecret = SecretKeySpec(hmac, "AES")
 
@@ -36,15 +36,15 @@ open class MessageCryptor {
         )
     }
 
-    fun decrypt(dataToDecryptBase64: String?, encryptionKey: ByteArray, hmac: ByteArray): ByteArray {
+    open fun decrypt(dataToDecryptBase64: String?, encryptionKey: ByteArray, hmac: ByteArray): ByteArray {
         return decrypt(Base64.decodeBase64(dataToDecryptBase64), encryptionKey, hmac)
     }
 
-    fun unpackEphemeralPublicKey(dataToDecrypt: ByteArray): ByteArray {
+    open fun unpackEphemeralPublicKey(dataToDecrypt: ByteArray): ByteArray {
         return dataToDecrypt.slice((dataToDecrypt.size - 65)..(dataToDecrypt.size - 1)).toByteArray()
     }
 
-    fun unpackEphemeralPublicKey(dataToDecryptBase64: String): ByteArray {
+    open fun unpackEphemeralPublicKey(dataToDecryptBase64: String): ByteArray {
         return unpackEphemeralPublicKey(Base64.decodeBase64(dataToDecryptBase64))
     }
 }
