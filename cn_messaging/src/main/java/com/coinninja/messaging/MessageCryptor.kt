@@ -1,6 +1,6 @@
 package com.coinninja.messaging
 
-import org.apache.commons.codec.binary.Base64
+import android.util.Base64
 import org.cryptonode.jncryptor.AES256JNCryptor
 import javax.crypto.spec.SecretKeySpec
 
@@ -22,7 +22,7 @@ open class MessageCryptor {
         dataToEncrypt: ByteArray, encryptionKey: ByteArray, hmac: ByteArray,
         ephemeralPublicKey: ByteArray
     ): String? {
-        return Base64.encodeBase64String(encrypt(dataToEncrypt, encryptionKey, hmac, ephemeralPublicKey))
+        return Base64.encodeToString(encrypt(dataToEncrypt, encryptionKey, hmac, ephemeralPublicKey), Base64.DEFAULT)
     }
 
     open fun decrypt(dataToDecrypt: ByteArray, encryptionKey: ByteArray, hmac: ByteArray): ByteArray {
@@ -37,7 +37,7 @@ open class MessageCryptor {
     }
 
     open fun decrypt(dataToDecryptBase64: String?, encryptionKey: ByteArray, hmac: ByteArray): ByteArray {
-        return decrypt(Base64.decodeBase64(dataToDecryptBase64), encryptionKey, hmac)
+        return decrypt(Base64.decode(dataToDecryptBase64, Base64.DEFAULT), encryptionKey, hmac)
     }
 
     open fun unpackEphemeralPublicKey(dataToDecrypt: ByteArray): ByteArray {
@@ -45,6 +45,6 @@ open class MessageCryptor {
     }
 
     open fun unpackEphemeralPublicKey(dataToDecryptBase64: String): ByteArray {
-        return unpackEphemeralPublicKey(Base64.decodeBase64(dataToDecryptBase64))
+        return unpackEphemeralPublicKey(Base64.decode(dataToDecryptBase64, Base64.DEFAULT))
     }
 }
