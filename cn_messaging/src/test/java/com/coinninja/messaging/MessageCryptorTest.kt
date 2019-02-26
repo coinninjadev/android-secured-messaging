@@ -45,7 +45,7 @@ class MessageCryptorTest {
         val ephemeralPublicKey = Base64.decode(ephemeralPublicKeyBase64, Base64.DEFAULT)
         val decoded = messageCryptor.encryptAsBase64(dataToEncrypt, encryptionKey, encryptHmac, ephemeralPublicKey)
 
-        assertFalse(decoded!!.endsWith("\n", false));
+        assertFalse(decoded!!.contains("\n", false));
         val decrypted = messageCryptor.decrypt(decoded, encryptionKey, encryptHmac)
         assertThat(dataToEncrypt, equalTo(decrypted))
     }

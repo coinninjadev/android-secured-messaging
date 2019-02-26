@@ -22,7 +22,7 @@ open class MessageCryptor {
         dataToEncrypt: ByteArray, encryptionKey: ByteArray, hmac: ByteArray,
         ephemeralPublicKey: ByteArray
     ): String? {
-        return Base64.encodeToString(encrypt(dataToEncrypt, encryptionKey, hmac, ephemeralPublicKey), Base64.DEFAULT).trim()
+        return Base64.encodeToString(encrypt(dataToEncrypt, encryptionKey, hmac, ephemeralPublicKey), Base64.NO_WRAP)
     }
 
     open fun decrypt(dataToDecrypt: ByteArray, encryptionKey: ByteArray, hmac: ByteArray): ByteArray {
